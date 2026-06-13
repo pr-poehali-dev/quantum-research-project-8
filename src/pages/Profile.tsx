@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
 function getProfile() {
   const stored = localStorage.getItem("user_profile");
   if (stored) return JSON.parse(stored);
-  const fresh = { nickname: "", balance: 100, privileges: [] };
+  const fresh = { nickname: "", balance: 100, privileges: [], avatar: "" };
   localStorage.setItem("user_profile", JSON.stringify(fresh));
   return fresh;
 }
@@ -16,12 +16,25 @@ export default function Profile() {
   const [profile, setProfile] = useState(getProfile);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(profile.nickname);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const saveNickname = () => {
     const updated = { ...profile, nickname: draft.trim() || "Гость" };
     setProfile(updated);
     localStorage.setItem("user_profile", JSON.stringify(updated));
     setEditing(false);
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const updated = { ...profile, avatar: reader.result as string };
+      setProfile(updated);
+      localStorage.setItem("user_profile", JSON.stringify(updated));
+    };
+    reader.readAsDataURL(file);
   };
 
   const displayName = profile.nickname || "Гость";
@@ -47,8 +60,19 @@ export default function Profile() {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-6 mb-16"
         >
-          <div className="w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-3xl font-bold">
-            {avatarLetter}
+          <div
+            className="relative w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-3xl font-bold cursor-pointer group overflow-hidden"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {profile.avatar ? (
+              <img src={profile.avatar} alt="avatar" className="w-full h-full object-cover" />
+            ) : (
+              <span>{avatarLetter}</span>
+            )}
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
+              <Icon name="Camera" size={18} className="text-white" />
+            </div>
+            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
           </div>
           <div>
             {editing ? (

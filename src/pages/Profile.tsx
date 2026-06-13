@@ -1,10 +1,31 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
+function getProfile() {
+  const stored = localStorage.getItem("user_profile");
+  if (stored) return JSON.parse(stored);
+  const fresh = { nickname: "", balance: 100, privileges: [] };
+  localStorage.setItem("user_profile", JSON.stringify(fresh));
+  return fresh;
+}
 
 export default function Profile() {
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(getProfile);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(profile.nickname);
+
+  const saveNickname = () => {
+    const updated = { ...profile, nickname: draft.trim() || "Гость" };
+    setProfile(updated);
+    localStorage.setItem("user_profile", JSON.stringify(updated));
+    setEditing(false);
+  };
+
+  const displayName = profile.nickname || "Гость";
+  const avatarLetter = displayName[0].toUpperCase();
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -27,14 +48,36 @@ export default function Profile() {
           className="flex items-center gap-6 mb-16"
         >
           <div className="w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-3xl font-bold">
-            М
+            {avatarLetter}
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Макс</h1>
+            {editing ? (
+              <div className="flex items-center gap-3">
+                <input
+                  autoFocus
+                  value={draft}
+                  onChange={(e) => setDraft(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && saveNickname()}
+                  placeholder="Введи ник..."
+                  className="bg-transparent border-b border-white/40 text-2xl font-bold tracking-tight outline-none text-white placeholder:text-white/20 w-48"
+                />
+                <button onClick={saveNickname} className="text-white/50 hover:text-white transition-colors">
+                  <Icon name="Check" size={18} />
+                </button>
+                <button onClick={() => setEditing(false)} className="text-white/30 hover:text-white transition-colors">
+                  <Icon name="X" size={16} />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 group cursor-pointer" onClick={() => { setDraft(profile.nickname); setEditing(true); }}>
+                <h1 className="text-3xl font-bold tracking-tight">{displayName}</h1>
+                <Icon name="Pencil" size={14} className="text-white/20 group-hover:text-white/60 transition-colors" />
+              </div>
+            )}
             <div className="flex items-center gap-3 mt-2">
               <span className="text-xs uppercase tracking-[0.3em] text-white/40">Статус</span>
-              <span className="border border-white/20 text-white text-xs uppercase tracking-widest px-3 py-1">
-                VIP
+              <span className="border border-white/20 text-white/50 text-xs uppercase tracking-widest px-3 py-1">
+                Стандарт
               </span>
             </div>
           </div>
@@ -47,15 +90,33 @@ export default function Profile() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="mt-4 border-t border-white/10 pt-10 grid grid-cols-2 gap-6 text-center"
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="border border-white/10 p-6 mb-8"
+        >
+          <div className="text-xs uppercase tracking-[0.4em] text-white/30 mb-4">Мои привилегии</div>
+          {profile.privileges.length === 0 ? (
+            <div className="text-white/20 text-sm">Привилегий пока нет — купи первую на главной</div>
+          ) : (
+            <div className="flex flex-wrap gap-3">
+              {profile.privileges.map((p: string, i: number) => (
+                <span key={i} className="border border-white/20 text-white text-xs uppercase tracking-widest px-3 py-1">{p}</span>
+              ))}
+            </div>
+          )}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="border-t border-white/10 pt-10 grid grid-cols-2 gap-6 text-center"
         >
           <div>
-            <div className="text-2xl font-bold">1</div>
+            <div className="text-2xl font-bold">{profile.privileges.length}</div>
             <div className="text-white/40 text-xs uppercase tracking-widest mt-1">Привилегии</div>
           </div>
           <div>
-            <div className="text-2xl font-bold">VIP</div>
+            <div className="text-2xl font-bold">Стандарт</div>
             <div className="text-white/40 text-xs uppercase tracking-widest mt-1">Уровень</div>
           </div>
         </motion.div>

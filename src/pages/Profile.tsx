@@ -120,7 +120,15 @@ export default function Profile() {
           <Icon name="ArrowLeft" size={16} />
           Назад
         </button>
-        <div className="text-sm uppercase tracking-[0.3em] text-white/40">Privilège</div>
+        <div className="flex items-center gap-4">
+          <div className="text-sm uppercase tracking-[0.3em] text-white/40">Privilège</div>
+          <button
+            onClick={() => { localStorage.removeItem("user_profile"); navigate("/login"); }}
+            className="text-white/30 hover:text-red-400 transition-colors text-xs uppercase tracking-widest cursor-pointer"
+          >
+            Выйти
+          </button>
+        </div>
       </header>
 
       <div className="max-w-4xl mx-auto px-6 py-16">

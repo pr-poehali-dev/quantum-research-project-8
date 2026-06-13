@@ -86,11 +86,9 @@ export default function Hero() {
   return (
     <div
       ref={container}
-      className="relative flex items-center justify-center min-h-screen overflow-hidden py-20"
+      className="relative flex items-center justify-center min-h-screen py-24 bg-black"
     >
-      <div className="absolute inset-0 w-full h-full bg-black" />
-
-      <motion.div style={{ y }} className="relative z-10 text-center text-white flex flex-col items-center">
+      <motion.div style={{ y }} className="relative z-10 text-center text-white flex flex-col items-center w-full px-6">
         <div className="text-[20vw] md:text-[18vw] lg:text-[16vw] font-bold tracking-tight leading-none select-none">
           М
         </div>
@@ -98,7 +96,7 @@ export default function Hero() {
           Privilège
         </p>
 
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 justify-center w-full max-w-2xl mx-auto">
           {ITEMS.map((item) => (
             <ShopCard key={item.key} item={item} />
           ))}

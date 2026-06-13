@@ -17,7 +17,9 @@ export default function Header({ className }: HeaderProps) {
             Привилегии
           </a>
           <a
-            href="#contact"
+            href="https://max.ru/join/EafZmRWMxZQHSLgYoa3gryiX4RngM-LL0tMIAu7UM2Y"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-white hover:text-neutral-400 transition-colors duration-300 uppercase text-sm"
           >
             Вступить

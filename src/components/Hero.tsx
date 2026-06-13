@@ -1,5 +1,13 @@
 import { useScroll, useTransform, motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+
+function getProfile() {
+  const stored = localStorage.getItem("user_profile");
+  if (stored) return JSON.parse(stored);
+  const fresh = { nickname: "", balance: 100, privileges: [], avatar: "" };
+  localStorage.setItem("user_profile", JSON.stringify(fresh));
+  return fresh;
+}
 
 export default function Hero() {
   const container = useRef<HTMLDivElement>(null);
@@ -8,6 +16,24 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0vh", "50vh"]);
+
+  const [status, setStatus] = useState<"idle" | "success" | "already" | "broke">(() => {
+    const p = getProfile();
+    return p.privileges?.includes("VIP") ? "already" : "idle";
+  });
+
+  const handleBuy = () => {
+    const profile = getProfile();
+    if (profile.privileges?.includes("VIP")) { setStatus("already"); return; }
+    if (profile.balance < 100) { setStatus("broke"); return; }
+    const updated = {
+      ...profile,
+      balance: profile.balance - 100,
+      privileges: [...(profile.privileges || []), "VIP"],
+    };
+    localStorage.setItem("user_profile", JSON.stringify(updated));
+    setStatus("success");
+  };
 
   return (
     <div
@@ -37,9 +63,41 @@ export default function Hero() {
             <span className="text-white/50 text-sm">Стоимость</span>
             <span className="text-xl font-bold">100 💠</span>
           </div>
-          <button className="mt-5 w-full bg-white text-black text-sm uppercase tracking-widest py-3 hover:bg-white/80 transition-colors duration-300 cursor-pointer">
-            Получить
-          </button>
+
+          {status === "success" && (
+            <div className="mt-4 text-green-400 text-sm text-center uppercase tracking-widest">VIP получен!</div>
+          )}
+          {status === "already" && (
+            <div className="mt-4 text-white/40 text-sm text-center uppercase tracking-widest">Уже куплено</div>
+          )}
+          {status === "broke" && (
+            <div className="mt-4 text-red-400 text-sm text-center uppercase tracking-widest">Недостаточно 💠</div>
+          )}
+
+          {status === "idle" && (
+            <button
+              onClick={handleBuy}
+              className="mt-5 w-full bg-white text-black text-sm uppercase tracking-widest py-3 hover:bg-white/80 transition-colors duration-300 cursor-pointer"
+            >
+              Получить
+            </button>
+          )}
+          {(status === "success" || status === "already") && (
+            <button
+              disabled
+              className="mt-5 w-full bg-white/10 text-white/30 text-sm uppercase tracking-widest py-3 cursor-not-allowed"
+            >
+              Получить
+            </button>
+          )}
+          {status === "broke" && (
+            <button
+              disabled
+              className="mt-5 w-full bg-white/10 text-white/30 text-sm uppercase tracking-widest py-3 cursor-not-allowed"
+            >
+              Получить
+            </button>
+          )}
         </motion.div>
       </motion.div>
     </div>

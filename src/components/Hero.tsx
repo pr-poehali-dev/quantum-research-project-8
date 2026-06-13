@@ -14,25 +14,16 @@ export default function Hero() {
       ref={container}
       className="relative flex items-center justify-center h-screen overflow-hidden"
     >
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 w-full h-full"
-      >
-        <img
-          src="/images/mountain-landscape.jpg"
-          alt="Mountain landscape"
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
+      <div className="absolute inset-0 w-full h-full bg-black" />
 
-      <div className="relative z-10 text-center text-white">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
-          ОТКРОЙ
-        </h1>
-        <p className="text-lg md:text-xl max-w-2xl mx-auto px-6 opacity-90">
-          Исследуй границы дизайна с иммерсивным параллакс-эффектом
+      <motion.div style={{ y }} className="relative z-10 text-center text-white flex flex-col items-center">
+        <div className="text-[20vw] md:text-[18vw] lg:text-[16vw] font-bold tracking-tight leading-none select-none">
+          М
+        </div>
+        <p className="text-lg md:text-xl max-w-2xl mx-auto px-6 opacity-60 uppercase tracking-[0.4em] mt-4">
+          Privilège
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

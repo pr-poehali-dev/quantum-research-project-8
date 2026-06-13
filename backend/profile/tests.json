@@ -1,0 +1,27 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Upsert profile",
+      "method": "POST",
+      "path": "/",
+      "body": {"action": "upsert", "id": "111111", "nickname": "Test", "balance": 100, "privileges": [], "avatar": ""},
+      "expectedStatus": 200,
+      "expectedBody": {"ok": true},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get profile",
+      "method": "GET",
+      "path": "/?id=111111",
+      "expectedStatus": 200,
+      "expectedBody": {"id": "111111"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

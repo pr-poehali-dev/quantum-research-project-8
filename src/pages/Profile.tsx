@@ -117,9 +117,9 @@ export default function Profile() {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="border border-white/10 p-6 mb-8"
         >
-          <div className="text-xs uppercase tracking-[0.4em] text-white/30 mb-4">Мои привилегии</div>
+          <div className="text-xs uppercase tracking-[0.4em] text-white/30 mb-4">Мои покупки</div>
           {profile.privileges.length === 0 ? (
-            <div className="text-white/20 text-sm">Привилегий пока нет — купи первую на главной</div>
+            <div className="text-white/20 text-sm">Покупок пока нет — купи первую привилегию на главной</div>
           ) : (
             <div className="flex flex-wrap gap-3">
               {profile.privileges.map((p: string, i: number) => (

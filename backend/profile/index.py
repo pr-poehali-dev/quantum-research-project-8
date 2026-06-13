@@ -48,19 +48,17 @@ def handler(event: dict, context) -> dict:
         if action == "upsert":
             pid = body.get("id")
             nickname = body.get("nickname", "")
-            balance = body.get("balance", 100)
             privileges = body.get("privileges", [])
             avatar = body.get("avatar", "")
             is_admin = pid == ADMIN_ID
             cur.execute("""
                 INSERT INTO profiles (id, nickname, balance, privileges, avatar, is_admin)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, 100, %s, %s, %s)
                 ON CONFLICT (id) DO UPDATE SET
                     nickname = EXCLUDED.nickname,
-                    balance = EXCLUDED.balance,
                     privileges = EXCLUDED.privileges,
                     avatar = EXCLUDED.avatar
-            """, (pid, nickname, balance, privileges, avatar, is_admin))
+            """, (pid, nickname, privileges, avatar, is_admin))
             conn.commit()
             conn.close()
             return {"statusCode": 200, "headers": headers, "body": json.dumps({"ok": True})}

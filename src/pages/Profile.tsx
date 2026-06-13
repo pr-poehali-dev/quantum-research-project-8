@@ -61,7 +61,7 @@ export default function Profile() {
           className="flex items-center gap-6 mb-16"
         >
           <div
-            className="relative w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-3xl font-bold cursor-pointer group overflow-hidden"
+            className="relative w-20 h-20 min-w-[80px] min-h-[80px] rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-3xl font-bold cursor-pointer group overflow-hidden"
             onClick={() => fileInputRef.current?.click()}
           >
             {profile.avatar ? (

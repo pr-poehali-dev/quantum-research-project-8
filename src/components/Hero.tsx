@@ -10,8 +10,8 @@ function getProfile() {
 }
 
 const ITEMS = [
-  { key: "VIP", label: "VIP", desc: "Привилегия · Эксклюзивный доступ", price: 100 },
-  { key: "VIP+", label: "VIP +", desc: "Максимальный статус · Все привилегии", price: 500 },
+  { key: "VIP", label: "VIP", desc: "Привилегия · Эксклюзивный доступ", price: 250 },
+  { key: "VIP+", label: "VIP +", desc: "Максимальный статус · Все привилегии", price: 2000 },
 ];
 
 function ShopCard({ item }: { item: typeof ITEMS[0] }) {

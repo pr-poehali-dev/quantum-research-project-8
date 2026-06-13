@@ -12,6 +12,9 @@ function getProfile() {
 const ITEMS = [
   { key: "VIP", label: "VIP", desc: "Привилегия · Эксклюзивный доступ", price: 250 },
   { key: "VIP+", label: "VIP +", desc: "Максимальный статус · Все привилегии", price: 2000 },
+  { key: "Рандом", label: "Рандом", desc: "Привилегия · Случайный бонус", price: 100 },
+  { key: "Герой", label: "Герой", desc: "Привилегия · Статус героя", price: 500 },
+  { key: "Король", label: "Король", desc: "Привилегия · Высший титул", price: 5000 },
 ];
 
 function ShopCard({ item }: { item: typeof ITEMS[0] }) {
@@ -96,7 +99,7 @@ export default function Hero() {
           Privilège
         </p>
 
-        <div className="flex flex-col md:flex-row gap-6 justify-center w-full max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center w-full max-w-5xl mx-auto">
           {ITEMS.map((item) => (
             <ShopCard key={item.key} item={item} />
           ))}

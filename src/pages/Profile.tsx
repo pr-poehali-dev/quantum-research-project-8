@@ -5,8 +5,15 @@ import Icon from "@/components/ui/icon";
 
 function getProfile() {
   const stored = localStorage.getItem("user_profile");
-  if (stored) return JSON.parse(stored);
-  const fresh = { nickname: "", balance: 100, privileges: [], avatar: "" };
+  if (stored) {
+    const p = JSON.parse(stored);
+    if (!p.id) {
+      p.id = String(Math.floor(100000 + Math.random() * 900000));
+      localStorage.setItem("user_profile", JSON.stringify(p));
+    }
+    return p;
+  }
+  const fresh = { nickname: "", balance: 100, privileges: [], avatar: "", id: String(Math.floor(100000 + Math.random() * 900000)) };
   localStorage.setItem("user_profile", JSON.stringify(fresh));
   return fresh;
 }
@@ -98,6 +105,7 @@ export default function Profile() {
                 <Icon name="Pencil" size={14} className="text-white/20 group-hover:text-white/60 transition-colors" />
               </div>
             )}
+            <div className="text-white/30 text-xs tracking-widest mt-1">ID: {profile.id}</div>
             <div className="flex items-center gap-3 mt-2">
               <span className="text-xs uppercase tracking-[0.3em] text-white/40">Статус</span>
               <span className="border border-white/20 text-white/50 text-xs uppercase tracking-widest px-3 py-1">
